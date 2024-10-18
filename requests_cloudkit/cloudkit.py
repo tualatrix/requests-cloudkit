@@ -20,7 +20,6 @@ import ecdsa
 import hashlib
 import json
 import requests
-import pytz
 
 class CloudKitAuth(requests.auth.AuthBase):
     """
@@ -40,7 +39,7 @@ class CloudKitAuth(requests.auth.AuthBase):
             raise Exception("Requires one of pem or key_file_name")
 
     def __call__(self, r):
-        dt = datetime.datetime.now(tz=pytz.UTC)
+        dt = datetime.datetime.now(datetime.timezone.utc)
         dt = dt.replace(microsecond=0)
         formatted_date = dt.isoformat().replace("+00:00", "Z")
         sig = self.make_signature(formatted_date, r.body, r.path_url)
